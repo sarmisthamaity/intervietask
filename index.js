@@ -4,7 +4,8 @@ require('dotenv').config();
 require('./database/connect')
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express');
-const routes = require('./routes')
+const routes = require('./routes/index')
+const rou = require('./swagger/swagger-routes')
 
 app.use(express.json());
 
@@ -19,7 +20,7 @@ const swaggerDefinition = {
 const options = {
     swaggerDefinition,
     // Paths to files containing OpenAPI definitions
-    apis: ['./routes/swagger.routes.js'],
+    apis:  ['./swagger/*.js'] //['./routes/swagger.routes.js'],
 };
 
 const swaggerDocument = swaggerJSDoc(options);
@@ -27,8 +28,8 @@ const swaggerDocument = swaggerJSDoc(options);
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/', routes);
+app.use(rou)
 
 app.listen(process.env.PORT, () => {
     console.log(`port number is ${process.env.PORT}`);
 });
-
